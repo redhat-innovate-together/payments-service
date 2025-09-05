@@ -1,5 +1,5 @@
 Mikroslužba: Platby (Payments)
-Tento dokument poskytuje detailní popis a technickou dokumentaci pro mikroslužbu Platby, která je klíčovou součástí e-commerce platformy Alza.cz.
+Tento dokument poskytuje detailní popis a technickou dokumentaci pro mikroslužbu Platby, která je klíčovou součástí e-commerce platformy rachota.cz.
 
 🚀 Popis a účel
 Mikroslužba Platby je zodpovědná za kompletní životní cyklus platebních transakcí. Jejím hlavním úkolem je vytvářet platby, bezpečně komunikovat s externími platebními bránami (např. Adyen, GoPay, PayPal), zpracovávat jejich odpovědi (callbacky) a udržovat konzistentní stav plateb napříč celým systémem.
@@ -37,13 +37,13 @@ Následuje specifikace RESTful API, které služba poskytuje pro synchronní kom
 
 openapi: 3.0.1
 info:
-  title: Alza Payments API
+  title: Rachota Payments API
   description: |-
-    API pro správu platebních transakcí v rámci ekosystému Alza.cz.
+    API pro správu platebních transakcí v rámci ekosystému rachota.cz.
     Umožňuje vytvářet platby, zjišťovat jejich stav a iniciovat vratky.
   version: 1.0.0
 servers:
-  - url: https://api.alza.cz/payments
+  - url: https://api.rachota.cz/payments
     description: Produkční prostředí
   - url: http://localhost:5010
     description: Lokální vývojové prostředí
@@ -164,12 +164,12 @@ components:
               type: string
               format: uri
               description: URL, na kterou bude uživatel přesměrován po úspěšné platbě.
-              example: "https://www.alza.cz/objednavka/dekujeme"
+              example: "https://www.rachota.cz/objednavka/dekujeme"
             failureUrl:
               type: string
               format: uri
               description: URL, na kterou bude uživatel přesměrován po neúspěšné platbě.
-              example: "https://www.alza.cz/objednavka/platba-se-nezdarila"
+              example: "https://www.rachota.cz/objednavka/platba-se-nezdarila"
 
     PaymentResponse:
       type: object
@@ -271,7 +271,7 @@ Docker Desktop (pro spuštění databáze a RabbitMQ)
 Postup
 Naklonování repozitáře
 
-git clone https://github.com/alza-cz/payments-service.git
+git clone https://github.com/rachota-cz/payments-service.git
 cd payments-service
 
 Spuštění závislostí
@@ -284,7 +284,7 @@ Zkopírujte appsettings.template.json na appsettings.Development.json a vyplňte
 
 {
   "ConnectionStrings": {
-    "Database": "Host=localhost;Port=5432;Database=alza_payments;Username=user;Password=password"
+    "Database": "Host=localhost;Port=5432;Database=rachota_payments;Username=user;Password=password"
   },
   "RabbitMQ": {
     "HostName": "localhost"
@@ -298,13 +298,13 @@ Zkopírujte appsettings.template.json na appsettings.Development.json a vyplňte
 
 Spuštění aplikace
 
-dotnet run --project src/Alza.Payments.Api/Alza.Payments.Api.csproj
+dotnet run --project src/Rachota.Payments.Api/Rachota.Payments.Api.csproj
 
 Služba bude ve výchozím stavu naslouchat na http://localhost:5010.
 
 📞 Kontakty
 Tým: Phoenix
 
-Team Lead: Jan Novák
+Team Lead: František Vomáčka
 
-Slack kanál: #team-phoenix-payments
+Slack kanál: #team-rachota-payments

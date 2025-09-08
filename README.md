@@ -1,4 +1,4 @@
-# Mikroslužba: Platby (Payments)
+# Mikroslužba: Platby Astra
 
 Tento dokument poskytuje detailní popis a technickou dokumentaci pro mikroslužbu **Platby**, která je klíčovou součástí e-commerce platformy **Astra**.
 
@@ -6,7 +6,7 @@ Tento dokument poskytuje detailní popis a technickou dokumentaci pro mikrosluž
 
 ## 🚀 Popis a účel
 
-Mikroslužba **Platby** je zodpovědná za kompletní životní cyklus platebních transakcí. Jejím hlavním úkolem je vytvářet platby, bezpečně komunikovat s externími platebními bránami (např. Adyen, GoPay, PayPal), zpracovávat jejich odpovědi (callbacky) a udržovat konzistentní stav plateb napříč celým systémem.
+Mikroslužba **Platby** je zodpovědná za kompletní životní cyklus platebních transakcí v platformě Astra. Jejím hlavním úkolem je vytvářet platby, bezpečně komunikovat s externími platebními bránami (např. Adyen, GoPay, PayPal), zpracovávat jejich odpovědi (callbacky) a udržovat konzistentní stav plateb napříč celým systémem.
 
 Služba funguje jako centrální autorita pro všechny finanční transakce spojené s objednávkami a zajišťuje oddělení platební logiky od ostatních částí systému.
 
@@ -32,7 +32,7 @@ Služba funguje jako centrální autorita pro všechny finanční transakce spoj
 
 ---
 
-## 📖 API Dokumentace (OpenAPI 3.0)
+## 📖 API Dokumentace (AstraAPI 3.0)
 
 Následuje specifikace RESTful API, které služba poskytuje pro synchronní komunikaci.
 
@@ -239,7 +239,7 @@ components:
 
 ## 📨 Asynchronní komunikace (Eventy)
 
-Služba intenzivně využívá asynchronní komunikaci pro zajištění oddělení (decoupling) od ostatních částí systému.
+Služba Astra intenzivně využívá asynchronní komunikaci pro zajištění oddělení (decoupling) od ostatních částí systému.
 
 ### Publikované eventy
 
@@ -262,7 +262,7 @@ Když dojde k významné změně stavu platby, služba publikuje zprávu do Rabb
 
 ---
 
-## 💻 Spuštění v lokálním prostředí
+## 💻 Spuštění Mikroslužby Astra v lokálním prostředí
 
 Pro spuštění služby na lokálním stroji postupujte následovně.
 
@@ -273,19 +273,19 @@ Pro spuštění služby na lokálním stroji postupujte následovně.
 
 ### Postup
 
-1.  **Naklonování repozitáře**
+1.  **Naklonování repozitáře Astra**
     ```bash
     git clone [https://github.com/astra-cz/payments-service.git](https://github.com/astra-cz/payments-service.git)
     cd payments-service
     ```
 
-2.  **Spuštění závislostí**
+2.  **Spuštění závislostí Astra**
     Spusťte databázi (PostgreSQL) a message broker (RabbitMQ) pomocí Docker Compose.
     ```bash
     docker-compose up -d
     ```
 
-3.  **Konfigurace**
+3.  **Konfigurace Astra**
     Zkopírujte `appsettings.template.json` na `appsettings.Development.json` a vyplňte potřebné connection stringy a klíče k platebním bránám (pro testovací prostředí).
     ```json
     {
@@ -303,7 +303,7 @@ Pro spuštění služby na lokálním stroji postupujte následovně.
     }
     ```
 
-4.  **Spuštění aplikace**
+4.  **Spuštění aplikace Astra**
     ```bash
     dotnet run --project src/Astra.Payments.Api/Astra.Payments.Api.csproj
     ```

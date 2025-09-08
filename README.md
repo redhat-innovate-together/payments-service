@@ -1,52 +1,55 @@
-Mikroslužba: Platby (Payments)
-Tento dokument poskytuje detailní popis a technickou dokumentaci pro mikroslužbu Platby, která je klíčovou součástí e-commerce platformy rachota.cz.
+# Mikroslužba: Platby (Payments)
 
-🚀 Popis a účel
-Mikroslužba Platby je zodpovědná za kompletní životní cyklus platebních transakcí. Jejím hlavním úkolem je vytvářet platby, bezpečně komunikovat s externími platebními bránami (např. Adyen, GoPay, PayPal), zpracovávat jejich odpovědi (callbacky) a udržovat konzistentní stav plateb napříč celým systémem.
+Tento dokument poskytuje detailní popis a technickou dokumentaci pro mikroslužbu **Platby**, která je klíčovou součástí e-commerce platformy **Astra**.
+
+---
+
+## 🚀 Popis a účel
+
+Mikroslužba **Platby** je zodpovědná za kompletní životní cyklus platebních transakcí. Jejím hlavním úkolem je vytvářet platby, bezpečně komunikovat s externími platebními bránami (např. Adyen, GoPay, PayPal), zpracovávat jejich odpovědi (callbacky) a udržovat konzistentní stav plateb napříč celým systémem.
 
 Služba funguje jako centrální autorita pro všechny finanční transakce spojené s objednávkami a zajišťuje oddělení platební logiky od ostatních částí systému.
 
-Klíčové funkce
-Vytvoření platby: Iniciace nové platby pro konkrétní objednávku.
+### Klíčové funkce
 
-Zpracování různých platebních metod: Podpora plateb kartou, bankovním převodem, na dobírku, Apple Pay, Google Pay atd.
+* **Vytvoření platby**: Iniciace nové platby pro konkrétní objednávku.
+* **Zpracování různých platebních metod**: Podpora plateb kartou, bankovním převodem, na dobírku, Apple Pay, Google Pay atd.
+* **Zpracování callbacků**: Příjem a validace asynchronních notifikací od platebních bran o změně stavu platby (zaplaceno, selhalo, zrušeno).
+* **Dotazování na stav**: Poskytování aktuálního stavu platby ostatním mikroslužbám (např. Objednávkám).
+* **Správa vratek (refunds)**: Zajištění procesu vrácení peněz zákazníkovi.
+* **Zabezpečení**: Zajištění bezpečnosti citlivých dat a komunikace v souladu se standardy PCI DSS.
 
-Zpracování callbacků: Příjem a validace asynchronních notifikací od platebních bran o změně stavu platby (zaplaceno, selhalo, zrušeno).
+---
 
-Dotazování na stav: Poskytování aktuálního stavu platby ostatním mikroslužbám (např. Objednávkám).
+## 🛠️ Technologický stack
 
-Správa vratek (refunds): Zajištění procesu vrácení peněz zákazníkovi.
+* **Jazyk & Framework**: C# / .NET 8
+* **Datová vrstva**: PostgreSQL, Dapper
+* **Asynchronní komunikace**: RabbitMQ (princip Event-Driven Architecture)
+* **Kontejnerizace**: Docker
+* **Orchestrace**: Kubernetes
+* **Caching**: Redis
 
-Zabezpečení: Zajištění bezpečnosti citlivých dat a komunikace v souladu se standardy PCI DSS.
+---
 
-🛠️ Technologický stack
-Jazyk & Framework: C# / .NET 8
+## 📖 API Dokumentace (OpenAPI 3.0)
 
-Datová vrstva: PostgreSQL, Dapper
-
-Asynchronní komunikace: RabbitMQ (princip Event-Driven Architecture)
-
-Kontejnerizace: Docker
-
-Orchestrace: Kubernetes
-
-Caching: Redis
-
-📖 API Dokumentace (OpenAPI 3.0)
 Následuje specifikace RESTful API, které služba poskytuje pro synchronní komunikaci.
 
+```yaml
 openapi: 3.0.1
 info:
-  title: Rachota Payments API
+  title: Astra Payments API
   description: |-
-    API pro správu platebních transakcí v rámci ekosystému rachota.cz.
+    API pro správu platebních transakcí v rámci ekosystému Astra.
     Umožňuje vytvářet platby, zjišťovat jejich stav a iniciovat vratky.
   version: 1.0.0
 servers:
-  - url: https://api.rachota.cz/payments
+  - url: [https://api.astra.cz/payments](https://api.astra.cz/payments)
     description: Produkční prostředí
   - url: http://localhost:5010
     description: Lokální vývojové prostředí
+
 paths:
   /api/v1/payments:
     post:
@@ -64,7 +67,7 @@ paths:
               $ref: '#/components/schemas/PaymentRequest'
       responses:
         '201':
-          description: Platba úspěšně vytvořena. V odpovědi je `redirectUrl` pro platební bránu.
+          description: Platba úspěšně vytvořena. V odpovědi je redirectUrl pro platební bránu.
           content:
             application/json:
               schema:
@@ -75,6 +78,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+
   /api/v1/payments/{paymentId}:
     get:
       tags:
@@ -99,6 +103,7 @@ paths:
                 $ref: '#/components/schemas/PaymentDetailedResponse'
         '404':
           description: Platba s daným ID nebyla nalezena.
+
   /api/v1/payments/{paymentId}/refunds:
     post:
       tags:
@@ -164,12 +169,12 @@ components:
               type: string
               format: uri
               description: URL, na kterou bude uživatel přesměrován po úspěšné platbě.
-              example: "https://www.rachota.cz/objednavka/dekujeme"
+              example: "[https://www.astra.cz/objednavka/dekujeme](https://www.astra.cz/objednavka/dekujeme)"
             failureUrl:
               type: string
               format: uri
               description: URL, na kterou bude uživatel přesměrován po neúspěšné platbě.
-              example: "https://www.rachota.cz/objednavka/platba-se-nezdarila"
+              example: "[https://www.astra.cz/objednavka/platba-se-nezdarila](https://www.astra.cz/objednavka/platba-se-nezdarila)"
 
     PaymentResponse:
       type: object
@@ -229,82 +234,77 @@ components:
         message:
           type: string
           example: "Měna 'XYZ' není podporována."
+```
+---
 
-📨 Asynchronní komunikace (Eventy)
+## 📨 Asynchronní komunikace (Eventy)
+
 Služba intenzivně využívá asynchronní komunikaci pro zajištění oddělení (decoupling) od ostatních částí systému.
 
-Publikované eventy
+### Publikované eventy
+
 Když dojde k významné změně stavu platby, služba publikuje zprávu do RabbitMQ.
 
-payment.succeeded
+**`payment.succeeded`**
+* **Routing Key**: `payment.succeeded`
+* **Payload**: Obsahuje `paymentId`, `orderId`, `amount`, `paidAt`.
+* **Konzumenti**: Služba Objednávky (pro posun objednávky do stavu "Zaplaceno"), Sklad (pro zahájení expedice).
 
-Routing Key: payment.succeeded
+**`payment.failed`**
+* **Routing Key**: `payment.failed`
+* **Payload**: Obsahuje `paymentId`, `orderId`, `reason`.
+* **Konzumenti**: Služba Objednávky (pro zrušení objednávky nebo notifikaci zákazníka), Notifikační služba.
 
-Payload: Obsahuje paymentId, orderId, amount, paidAt.
+**`payment.refunded`**
+* **Routing Key**: `payment.refunded`
+* **Payload**: Obsahuje `paymentId`, `orderId`, `refundedAmount`.
+* **Konzumenti**: Účetnictví, Služba Objednávky.
 
-Konzumenti: Služba Objednávky (pro posun objednávky do stavu "Zaplaceno"), Sklad (pro zahájení expedice).
+---
 
-payment.failed
+## 💻 Spuštění v lokálním prostředí
 
-Routing Key: payment.failed
-
-Payload: Obsahuje paymentId, orderId, reason.
-
-Konzumenti: Služba Objednávky (pro zrušení objednávky nebo notifikaci zákazníka), Notifikační služba.
-
-payment.refunded
-
-Routing Key: payment.refunded
-
-Payload: Obsahuje paymentId, orderId, refundedAmount.
-
-Konzumenti: Účetnictví, Služba Objednávky.
-
-💻 Spuštění v lokálním prostředí
 Pro spuštění služby na lokálním stroji postupujte následovně.
 
-Požadavky
-.NET 8 SDK
+### Požadavky
 
-Docker Desktop (pro spuštění databáze a RabbitMQ)
+* .NET 8 SDK
+* Docker Desktop (pro spuštění databáze a RabbitMQ)
 
-Postup
-Naklonování repozitáře
+### Postup
 
-git clone https://github.com/rachota-cz/payments-service.git
-cd payments-service
+1.  **Naklonování repozitáře**
+    ```bash
+    git clone [https://github.com/astra-cz/payments-service.git](https://github.com/astra-cz/payments-service.git)
+    cd payments-service
+    ```
 
-Spuštění závislostí
-Spusťte databázi (PostgreSQL) a message broker (RabbitMQ) pomocí Docker Compose.
+2.  **Spuštění závislostí**
+    Spusťte databázi (PostgreSQL) a message broker (RabbitMQ) pomocí Docker Compose.
+    ```bash
+    docker-compose up -d
+    ```
 
-docker-compose up -d
-
-Konfigurace
-Zkopírujte appsettings.template.json na appsettings.Development.json a vyplňte potřebné connection stringy a klíče k platebním bránám (pro testovací prostředí).
-
-{
-  "ConnectionStrings": {
-    "Database": "Host=localhost;Port=5432;Database=rachota_payments;Username=user;Password=password"
-  },
-  "RabbitMQ": {
-    "HostName": "localhost"
-  },
-  "PaymentGateways": {
-    "Adyen": {
-      "ApiKey": "..."
+3.  **Konfigurace**
+    Zkopírujte `appsettings.template.json` na `appsettings.Development.json` a vyplňte potřebné connection stringy a klíče k platebním bránám (pro testovací prostředí).
+    ```json
+    {
+      "ConnectionStrings": {
+        "Database": "Host=localhost;Port=5432;Database=astra_payments;Username=user;Password=password"
+      },
+      "RabbitMQ": {
+        "HostName": "localhost"
+      },
+      "PaymentGateways": {
+        "Adyen": {
+          "ApiKey": "..."
+        }
+      }
     }
-  }
-}
+    ```
 
-Spuštění aplikace
-
-dotnet run --project src/Rachota.Payments.Api/Rachota.Payments.Api.csproj
-
-Služba bude ve výchozím stavu naslouchat na http://localhost:5010.
-
-📞 Kontakty
-Tým: Phoenix
-
-Team Lead: František Vomáčka
-
-Slack kanál: #team-rachota-payments
+4.  **Spuštění aplikace**
+    ```bash
+    dotnet run --project src/Astra.Payments.Api/Astra.Payments.Api.csproj
+    ```
+    Služba bude ve výchozím stavu naslouchat na `http://localhost:5010`.

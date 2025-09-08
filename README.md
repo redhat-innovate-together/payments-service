@@ -21,7 +21,7 @@ Služba funguje jako centrální autorita pro všechny finanční transakce spoj
 
 ---
 
-## 🛠️ Technologický stack
+## 🛠️ Technologický stack mikroslužby Platby Astra
 
 * **Jazyk & Framework**: C# / .NET 8
 * **Datová vrstva**: PostgreSQL, Dapper

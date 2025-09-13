@@ -34,9 +34,9 @@ Služba funguje jako centrální autorita pro všechny finanční transakce spoj
 
 ## 📖 API Dokumentace (AstraAPI 3.0)
 
-Následuje specifikace RESTful API, které služba poskytuje pro synchronní komunikaci.
+Následuje specifikace RESTful API, které služba poskytuje pro synchronní komunikaci:
 
-```yaml
+
 openapi: 3.0.1
 info:
   title: Astra Payments API
@@ -234,7 +234,7 @@ components:
         message:
           type: string
           example: "Měna 'XYZ' není podporována."
-```
+          
 ---
 
 ## 📨 Asynchronní komunikace (Eventy)
